@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Services", href: "#services" },
@@ -38,10 +39,18 @@ export default function Navbar() {
         <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link
             href="/"
-            className="text-white font-black text-lg tracking-[0.2em] hover:opacity-75 transition-opacity relative z-10"
+            className="hover:opacity-75 transition-opacity relative z-10"
             onClick={close}
           >
-            VOBITS
+            <Image
+              src="/Vobits_logo.png"
+              alt="Vobits"
+              width={120}
+              height={36}
+              className="h-8 w-auto"
+              style={{ filter: "brightness(0) invert(1)" }}
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}
