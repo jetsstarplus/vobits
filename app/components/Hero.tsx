@@ -52,6 +52,63 @@ const slides = [
   },
 ];
 
+/** Split action + subject into per-word entries, joining "&" with the preceding word. */
+function splitIntoWords(
+  action: string,
+  subject: string
+): Array<{ text: string; isAction: boolean }> {
+  const process = (words: string[], isAction: boolean) => {
+    const result: Array<{ text: string; isAction: boolean }> = [];
+    for (const w of words) {
+      if (w === "&" && result.length > 0) {
+        result[result.length - 1].text += " &";
+      } else {
+        result.push({ text: w, isAction });
+      }
+    }
+    return result;
+  };
+  return [
+    ...process(action.split(" ").filter(Boolean), true),
+    ...process(subject.split(" ").filter(Boolean), false),
+  ];
+}
+
+/** Mobile headline — each word on its own line, re-animates on slide change via key. */
+function MobileHeadline({ activeIndex }: { activeIndex: number }) {
+  const slide = slides[activeIndex];
+  const words = splitIntoWords(slide.action, slide.subject);
+  return (
+    <div style={{ textAlign: "start" }}>
+      {words.map((word, i) => (
+        <div key={i} style={{ overflow: "hidden" }}>
+          <span
+            style={{
+              display: "block",
+              fontSize: "clamp(3rem, 13vw, 5.5rem)",
+              fontWeight: 900,
+              textTransform: "uppercase",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.15,
+              paddingBottom: "0.1em",
+              fontFamily: "var(--font-geist-sans)",
+              color: word.isAction ? "#ffffff" : "rgba(255,255,255,0.28)",
+              transformOrigin: "0 100%",
+              animationName: "mobileWordReveal",
+              animationDuration: "0.65s",
+              animationTimingFunction: "cubic-bezier(0.26, 1, 0.48, 1)",
+              animationDelay: `${i * 0.07}s`,
+              animationFillMode: "both",
+            }}
+          >
+            {word.text}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /** Rotated-clip headline stack — only active + prev are ever visible. */
 function HeadlineStack({
   activeIndex,
@@ -382,17 +439,8 @@ export default function Hero() {
         </div>
 
         {/* Headline */}
-        <div className="relative flex-1 flex items-center">
-          <div
-            className="relative w-full overflow-hidden"
-            style={{ height: "clamp(6.5rem, 22vw, 12.5rem)" }}
-          >
-            <HeadlineStack
-              activeIndex={activeIndex}
-              prevIndex={prevIndex}
-              fontSize="clamp(2.5rem, 9.2vw, 5.5rem)"
-            />
-          </div>
+        <div className="relative flex-1 flex items-center justify-center">
+          <MobileHeadline key={activeIndex} activeIndex={activeIndex} />
         </div>
 
         {/* Copy + CTA + indicators */}
