@@ -6,10 +6,12 @@ import Services from "./components/Services";
 import Products from "./components/Products";
 import CTA from "./components/CTA";
 import Footer from "./components/Footer";
+import SectionColorManager from "./components/SectionColorManager";
 
 export default function Home() {
   return (
     <>
+      <SectionColorManager />
       <Navbar />
       <Hero />
       <Marquee />

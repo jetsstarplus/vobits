@@ -1,23 +1,27 @@
-import Image from "next/image";
+import ScrollReveal from "./ScrollReveal";
+import ParallaxImage from "./ParallaxImage";
 
 export default function Products() {
   return (
     <section id="products" className="py-32 px-6 border-t border-white/5">
       <div className="max-w-7xl mx-auto">
-        <p className="inline-flex items-center gap-3 text-xs tracking-[0.3em] text-gray-500 uppercase mb-6">
-          <span className="w-5 h-px bg-gray-600 inline-block" />
-          Our Products
-        </p>
-        <h2 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight mb-20">
-          Homegrown products
-          <br />
-          <span className="text-gray-500">solving real problems.</span>
-        </h2>
+        <ScrollReveal>
+          <p className="inline-flex items-center gap-3 text-xs tracking-[0.3em] text-gray-500 uppercase mb-6">
+            <span className="w-5 h-px bg-gray-600 inline-block" />
+            Our Products
+          </p>
+          <h2 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight mb-20">
+            Homegrown products
+            <br />
+            <span className="text-gray-500">solving real problems.</span>
+          </h2>
+        </ScrollReveal>
 
         {/* miliki.ke */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5">
           {/* Content */}
-          <div className="bg-[#0c0c0c] p-14 flex flex-col justify-between min-h-96">
+          <ScrollReveal className="bg-[#0c0c0c]" delay={80}>
+          <div className="p-14 flex flex-col justify-between min-h-96">
             <div>
               <div className="flex items-center gap-3 mb-10">
                 <span className="text-xs border border-emerald-500/25 text-emerald-400 px-3 py-1 uppercase tracking-wider font-mono">
@@ -52,15 +56,16 @@ export default function Products() {
               </span>
             </a>
           </div>
+          </ScrollReveal>
 
           {/* Visual — real image */}
-          <div className="relative bg-[#080808] min-h-80 overflow-hidden group">
-            <Image
+          <ScrollReveal className="relative bg-[#080808] min-h-80 group" delay={220}>
+            <ParallaxImage
               src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80&auto=format&fit=crop"
               alt="Mobile phone showing a digital application"
-              fill
-              className="object-cover brightness-50 group-hover:brightness-60 group-hover:scale-105 transition-all duration-700"
+              className="brightness-50"
               sizes="(max-width: 1024px) 100vw, 50vw"
+              speed={40}
             />
             {/* Tinted overlay */}
             <div className="absolute inset-0 bg-linear-to-br from-emerald-950/40 via-transparent to-[#080808]/60" />
@@ -74,7 +79,7 @@ export default function Products() {
                 .ke
               </p>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

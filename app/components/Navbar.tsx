@@ -24,7 +24,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#080808]/95 backdrop-blur-md border-b border-white/5"
+          ? "nav-scrolled backdrop-blur-md border-b border-white/5"
           : ""
       }`}
     >
@@ -42,7 +42,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-gray-400 hover:text-white transition-colors"
+              className="nav-link text-sm text-gray-400 hover:text-white transition-colors"
             >
               {link.label}
             </Link>

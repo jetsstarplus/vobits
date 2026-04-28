@@ -21,6 +21,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans, system-ui, sans-serif);
+  /* Smooth background color morph driven by SectionColorManager */
+  transition: background-color 1.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Custom scrollbar */
@@ -35,33 +37,102 @@ body {
   border-radius: 2px;
 }
 
-/* Marquee animation */
+/* ─── Marquee ─────────────────────────────────── */
 @keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
-
 .marquee-track {
   animation: marquee 35s linear infinite;
   will-change: transform;
 }
 
-/* Phrase cycling animation */
-@keyframes phraseIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ─── Hero — line clip reveal ─────────────────── */
+@keyframes heroLine {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0); }
+}
+.hero-line {
+  animation: heroLine 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.phrase-in {
-  animation: phraseIn 0.35s ease forwards;
+/* ─── Hero — fade + rise (eyebrow, body, buttons) */
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.hero-fade {
+  animation: heroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── Scroll reveal ───────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(38px);
+  transition:
+    opacity  0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Horizontal slide reveal (for labels/lines) */
+.reveal-x {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition:
+    opacity  0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-x.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ─── Scale reveal (for stat boxes) ──────────── */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity   0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ─── Expanding underline for nav links ─────── */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: white;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ─── Dynamic navbar background (matches section color) */
+.nav-scrolled {
+  background-color: var(--section-nav, #080808f0);
+  transition: background-color 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Glowing border on service card hover ─── */
+.service-card {
+  transition: background-color 0.3s ease, box-shadow 0.4s ease;
+}
+.service-card:hover {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+

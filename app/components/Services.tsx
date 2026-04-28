@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ScrollReveal from "./ScrollReveal";
 
 const services = [
   {
@@ -49,7 +50,7 @@ export default function Services() {
   return (
     <section id="services" className="py-32 px-6 border-t border-white/5">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-20">
+        <ScrollReveal className="mb-20">
           <p className="inline-flex items-center gap-3 text-xs tracking-[0.3em] text-gray-500 uppercase mb-6">
             <span className="w-5 h-px bg-gray-600 inline-block" />
             What We Do
@@ -59,14 +60,16 @@ export default function Services() {
             <br />
             <span className="text-gray-500">for your business.</span>
           </h2>
-        </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
-          {services.map((service) => (
-            <div
+          {services.map((service, index) => (
+            <ScrollReveal
               key={service.number}
-              className="bg-[#080808] flex flex-col hover:bg-[#0d0d0d] transition-colors group"
+              className="bg-[#080808]"
+              delay={index * 130}
             >
+              <div className="flex flex-col hover:bg-[#0d0d0d] transition-colors group service-card h-full">
               <div className="relative h-48 overflow-hidden">
                 <Image
                   src={service.image}
@@ -104,7 +107,8 @@ export default function Services() {
                   ))}
                 </div>
               </div>
-            </div>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
