@@ -1,0 +1,10 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^Set-Location 'C:\\\\Users\\\\Administrator\\\\Downloads\\\\saveweb2zip\\(1\\)\\\\www\\.metajive\\.com\\\\_next\\\\static\\\\css'; \\$f=\\(Get-ChildItem\\|Sort Length -Desc\\|Select -First 1\\)\\.FullName; \\$c=\\[IO\\.File\\]::ReadAllText\\(\\$f\\); \\$idx=\\$c\\.IndexOf\\('@keyframes'\\); Write-Host \"First keyframes at: \\$idx\"; Write-Host \\$c\\.Substring\\(\\$idx, 400\\)$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "Select": true,
+        "Out-Null": true
+    }
+}

@@ -110,7 +110,7 @@ export default function About() {
               alt="Modern open-plan office representing collaborative work environment"
               className="brightness-50"
               sizes="100vw"
-              speed={50}
+              speed={80}
             />
             <div className="absolute inset-0 bg-linear-to-r from-[#080808]/80 via-transparent to-[#080808]/80" />
             <div className="absolute inset-0 bg-linear-to-t from-[#080808] via-transparent to-[#080808]/30" />

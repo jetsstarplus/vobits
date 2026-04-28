@@ -65,7 +65,7 @@ export default function Products() {
               alt="Mobile phone showing a digital application"
               className="brightness-50"
               sizes="(max-width: 1024px) 100vw, 50vw"
-              speed={40}
+              speed={70}
             />
             {/* Tinted overlay */}
             <div className="absolute inset-0 bg-linear-to-br from-emerald-950/40 via-transparent to-[#080808]/60" />

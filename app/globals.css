@@ -47,13 +47,24 @@ body {
   will-change: transform;
 }
 
-/* ─── Hero — line clip reveal ─────────────────── */
+/* ─── Hero — line clip reveal (legacy) ─────────── */
 @keyframes heroLine {
   from { transform: translateY(110%); }
   to   { transform: translateY(0); }
 }
 .hero-line {
   animation: heroLine 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── Hero — rotation clip reveal (metajive-style) */
+@keyframes heroRotate {
+  from { transform: rotate(8deg); opacity: 0; }
+  to   { transform: rotate(0deg); opacity: 1; }
+}
+.hero-rotate {
+  animation: heroRotate 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: -5em 0;
+  display: block;
 }
 
 /* ─── Hero — fade + rise (eyebrow, body, buttons) */
@@ -117,6 +128,51 @@ body {
   height: 1px;
   background: white;
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Animated sliding underline (metajive-style) */
+@keyframes slideUnderline {
+  from { background-position-x: 0; }
+  to   { background-position-x: -166.6666%; }
+}
+.link-underline {
+  text-decoration: none;
+  background: linear-gradient(90deg, currentcolor, currentcolor 40%, transparent 0, transparent);
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 250% 1px;
+}
+.link-underline:hover {
+  animation: slideUnderline 0.5s cubic-bezier(0.34, 0, 0, 1);
+}
+
+/* ─── Vertical grid column overlay lines ──────── */
+.grid-lines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  padding-inline: clamp(1.5rem, 5vw, 3rem);
+  gap: 0;
+}
+.grid-lines > span {
+  border-left: 1px solid rgba(255, 255, 255, 0.028);
+}
+.grid-lines > span:last-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.028);
+}
+
+/* ─── Section bottom-bleed transition ─────────── */
+.section-bleed-bottom {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 180px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--section-bg, #080808));
 }
 .nav-link:hover::after {
   width: 100%;

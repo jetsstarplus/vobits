@@ -38,6 +38,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#080808] text-[#f0f0f0]">
+        {/* Subtle vertical grid column overlay lines */}
+        <div className="grid-lines" aria-hidden="true">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <span key={i} />
+          ))}
+        </div>
         <Cursor />
         {children}
       </body>

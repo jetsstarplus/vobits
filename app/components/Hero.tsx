@@ -1,131 +1,368 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import ParallaxImage from "./ParallaxImage";
+import Image from "next/image";
 
-const phrases = [
-  { action: "Build", subject: "Applications" },
-  { action: "Implement", subject: "Business Central" },
-  { action: "Automate", subject: "HR & Payroll" },
-  { action: "Launch", subject: "Digital Products" },
-  { action: "Scale", subject: "Your Business" },
+const slides = [
+  {
+    action: "Build",
+    subject: "Applications",
+    bg: "#0a1628",
+    accent: "#3b82f6",
+    image:
+      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&q=80&auto=format&fit=crop",
+    imageAlt: "Code on a monitor — bespoke application development",
+  },
+  {
+    action: "Implement",
+    subject: "Business Central",
+    bg: "#160a28",
+    accent: "#8b5cf6",
+    image:
+      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80&auto=format&fit=crop",
+    imageAlt: "Professional working at a laptop — ERP implementation",
+  },
+  {
+    action: "Automate",
+    subject: "HR & Payroll",
+    bg: "#0a2820",
+    accent: "#14b8a6",
+    image:
+      "https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?w=1200&q=80&auto=format&fit=crop",
+    imageAlt: "Team in a modern office — HR and payroll services",
+  },
+  {
+    action: "Launch",
+    subject: "Digital Products",
+    bg: "#281a0a",
+    accent: "#f97316",
+    image:
+      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&q=80&auto=format&fit=crop",
+    imageAlt: "Mobile phone showing a digital application",
+  },
+  {
+    action: "Scale",
+    subject: "Your Business",
+    bg: "#0a2816",
+    accent: "#22c55e",
+    image:
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80&auto=format&fit=crop",
+    imageAlt: "City skyline — scaling your business across East Africa",
+  },
 ];
 
 export default function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
+  const [transitioning, setTransitioning] = useState(false);
+
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (index === activeIndex) return;
+      setPrevIndex(activeIndex);
+      setTransitioning(true);
+      setActiveIndex(index);
+    },
+    [activeIndex]
+  );
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % phrases.length);
-    }, 2200);
-    return () => clearInterval(interval);
+    const timer = setInterval(() => {
+      setActiveIndex((current) => {
+        const next = (current + 1) % slides.length;
+        setPrevIndex(current);
+        setTransitioning(true);
+        return next;
+      });
+    }, 3800);
+    return () => clearInterval(timer);
   }, []);
 
+  const current = slides[activeIndex];
+
   return (
-    <section id="hero" className="relative min-h-screen flex items-center pt-24 pb-20 px-6 overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_15%_55%,rgba(59,130,246,0.07),transparent_60%)]" />
+    <section
+      id="hero"
+      className="relative overflow-hidden"
+      style={{
+        backgroundColor: current.bg,
+        transition: "background-color 1s cubic-bezier(0.34, 0, 0, 1)",
+        minHeight: "100dvh",
+      }}
+    >
+      {/* ── Desktop layout ── */}
+      <div
+        className="hidden lg:grid min-h-screen"
+        style={{ gridTemplateColumns: "60fr 40fr", minHeight: "100dvh" }}
+      >
+        {/* Left: headline + copy */}
+        <div className="flex flex-col justify-between px-12 xl:px-20 pt-36 pb-14">
+          {/* Rotating headline stack */}
+          <div className="flex-1 flex items-center">
+            <div
+              className="relative w-full"
+              style={{ height: "clamp(8rem, 22vw, 26rem)" }}
+            >
+              {slides.map((slide, i) => {
+                const isActive = i === activeIndex;
+                const isPrev = i === prevIndex;
+                const rot = isActive ? 0 : isPrev ? -8 : 8;
+                const doTransition = transitioning && (isActive || isPrev);
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        {/* Left */}
-        <div>
-          <p className="hero-fade inline-flex items-center gap-3 text-xs tracking-[0.3em] text-gray-500 uppercase mb-10" style={{ animationDelay: "0s" }}>
-            <span className="inline-block w-5 h-px bg-gray-600" />
-            Nairobi, Kenya
-          </p>
+                return (
+                  <div
+                    key={i}
+                    className="absolute inset-0 flex flex-col"
+                    style={{ zIndex: isActive ? 2 : isPrev ? 1 : 0 }}
+                  >
+                    {[slide.action, slide.subject].map((text, li) => (
+                      <div
+                        key={li}
+                        style={{
+                          overflow: "hidden",
+                          flex: 1,
+                          paddingBottom: "0.4rem",
+                          marginBottom: "-0.4rem",
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: "block",
+                            fontSize: "clamp(3.5rem, 9vw, 11rem)",
+                            fontWeight: 900,
+                            lineHeight: 1.0,
+                            letterSpacing: "-0.03em",
+                            fontFamily: "var(--font-geist-sans)",
+                            color:
+                              li === 0 ? "#ffffff" : "rgba(255,255,255,0.3)",
+                            transformOrigin: "-8em 50%",
+                            transform: `rotate(${rot}deg)`,
+                            transition: doTransition
+                              ? `transform 1s cubic-bezier(0.34, 0, 0, 1) ${li * 0.09}s`
+                              : "none",
+                          }}
+                        >
+                          {text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
-          <h1 className="text-6xl md:text-[5.5rem] font-black text-white leading-[0.92] tracking-tight mb-8">
-            {[
-              { text: "Building", cls: "text-white", delay: "0.1s" },
-              { text: "digital", cls: "text-white", delay: "0.25s" },
-              { text: "solutions", cls: "text-white", delay: "0.4s" },
-              { text: "that perform.", cls: "text-gray-500", delay: "0.55s" },
-            ].map(({ text, cls, delay }) => (
-              <span key={text} className="block overflow-hidden leading-none">
-                <span className={"hero-line block " + cls} style={{ animationDelay: delay }}>
-                  {text}
+          {/* Static copy + CTA + indicators */}
+          <div className="space-y-8">
+            <p className="text-[0.9rem] text-white/45 max-w-xs leading-[1.9]">
+              From bespoke applications to Microsoft Dynamics 365 Business
+              Central and outsourced HR &amp; payroll — powering businesses
+              across East Africa.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="#services"
+                className="bg-white text-black text-sm font-semibold px-8 py-4 hover:bg-gray-100 transition-colors"
+              >
+                Explore Services
+              </Link>
+              <Link
+                href="#contact"
+                className="group border border-white/20 text-white text-sm font-semibold px-8 py-4 hover:border-white/60 transition-all flex items-center gap-2"
+              >
+                {"Let's Talk"}
+                <span className="group-hover:translate-x-1 transition-transform inline-block">
+                  →
                 </span>
-              </span>
-            ))}
-          </h1>
+              </Link>
+            </div>
 
-          <p className="hero-fade text-[0.95rem] text-gray-400 max-w-lg mb-12 leading-[1.85]" style={{ animationDelay: "0.75s" }}>
-            From bespoke applications to Microsoft Dynamics 365 Business
-            Central implementations and outsourced HR &amp; payroll — we build
-            and manage the technology that powers businesses across East Africa.
-          </p>
-
-          <div className="hero-fade flex flex-wrap gap-4" style={{ animationDelay: "0.92s" }}>
-            <Link
-              href="#services"
-              className="bg-white text-black text-sm font-semibold px-8 py-4 hover:bg-gray-100 transition-colors"
-            >
-              Explore Services
-            </Link>
-            <Link
-              href="#contact"
-              className="group border border-white/15 text-white text-sm font-semibold px-8 py-4 hover:border-white/40 transition-all flex items-center gap-2"
-            >
-              {"Let's Talk"}
-              <span className="group-hover:translate-x-1 transition-transform inline-block">
-                →
+            {/* Slide indicators */}
+            <div className="flex items-center gap-6 pt-4 border-t border-white/10">
+              <span className="text-xs text-white/25 font-mono tabular-nums tracking-widest">
+                {String(activeIndex + 1).padStart(2, "0")}&nbsp;/&nbsp;
+                {String(slides.length).padStart(2, "0")}
               </span>
-            </Link>
+              <div className="flex items-center gap-3">
+                {slides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goToSlide(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                  >
+                    <span
+                      className="block h-px transition-all duration-500"
+                      style={{
+                        width: i === activeIndex ? "2rem" : "0.6rem",
+                        backgroundColor:
+                          i === activeIndex
+                            ? "#ffffff"
+                            : "rgba(255,255,255,0.2)",
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+              <span
+                className="ml-auto w-2 h-2 rounded-full"
+                style={{
+                  backgroundColor: current.accent,
+                  transition:
+                    "background-color 1s cubic-bezier(0.34, 0, 0, 1)",
+                }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Right — atmospheric image with phrase overlay */}
-        <div className="hero-fade hidden lg:block relative h-150" style={{ animationDelay: "0.28s" }}>
-          <ParallaxImage
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80&auto=format&fit=crop"
-            alt="Modern city buildings representing Vobits digital ambition"
-            className="brightness-40"
-            sizes="(max-width: 1280px) 50vw, 640px"
-            priority
-            speed={70}
-          />
-          {/* Top fade — hides top edge cleanly */}
-          <div className="absolute inset-0 bg-linear-to-t from-transparent to-[#080808]/80" />
-          {/* Bottom fade — ensures phrase text is always legible */}
-          <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-[#080808] via-[#080808]/60 to-transparent" />
-
-          <div className="absolute bottom-0 left-0 right-0 px-8 pb-4">
-            {phrases.map((phrase, i) => (
-              <div
-                key={i}
-                className={`flex items-baseline justify-between border-t border-white/10 py-4 transition-all duration-500 ${
-                  i === activeIndex ? "opacity-100" : "opacity-[0.15]"
-                }`}
-              >
-                <span className="text-[1.6rem] font-black tracking-tight text-white">
-                  {phrase.action}
-                </span>
-                <span className="text-[1.6rem] font-black tracking-tight text-gray-400">
-                  {phrase.subject}
-                </span>
-              </div>
-            ))}
-            <div className="border-t border-white/10" />
-          </div>
+        {/* Right: vertical image strip */}
+        <div className="relative overflow-hidden">
+          {slides.map((slide, i) => (
+            <div
+              key={i}
+              className="absolute inset-0"
+              style={{
+                transform: `translateY(${(i - activeIndex) * 100}%)`,
+                transition: transitioning
+                  ? "transform 1s cubic-bezier(0.34, 0, 0, 1)"
+                  : "none",
+              }}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.imageAlt}
+                fill
+                className="object-cover"
+                sizes="40vw"
+                priority={i === 0}
+              />
+              <div className="absolute inset-0 bg-black/15" />
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-        <span className="text-xs tracking-widest text-gray-500 uppercase">Scroll</span>
-        <svg
-          className="w-4 h-4 text-gray-500 animate-bounce"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+      {/* ── Mobile layout ── */}
+      <div className="lg:hidden flex flex-col min-h-screen px-6 pt-32 pb-12 relative">
+        {/* Background image (fades between slides) */}
+        <div className="absolute inset-0 overflow-hidden">
+          {slides.map((slide, i) => (
+            <div
+              key={i}
+              className="absolute inset-0"
+              style={{
+                opacity: i === activeIndex ? 1 : 0,
+                transition: "opacity 0.8s ease",
+              }}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.imageAlt}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={i === 0}
+              />
+              <div className="absolute inset-0 bg-black/60" />
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile headline */}
+        <div className="relative flex-1 flex items-center">
+          <div
+            className="relative w-full"
+            style={{ height: "clamp(6rem, 24vw, 10rem)" }}
+          >
+            {slides.map((slide, i) => {
+              const isActive = i === activeIndex;
+              const isPrev = i === prevIndex;
+              const rot = isActive ? 0 : isPrev ? -8 : 8;
+              const doTransition = transitioning && (isActive || isPrev);
+
+              return (
+                <div
+                  key={i}
+                  className="absolute inset-0 flex flex-col"
+                  style={{ zIndex: isActive ? 2 : isPrev ? 1 : 0 }}
+                >
+                  {[slide.action, slide.subject].map((text, li) => (
+                    <div
+                      key={li}
+                      style={{
+                        overflow: "hidden",
+                        flex: 1,
+                        paddingBottom: "0.3rem",
+                        marginBottom: "-0.3rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: "clamp(2.8rem, 12vw, 5rem)",
+                          fontWeight: 900,
+                          lineHeight: 1.0,
+                          letterSpacing: "-0.03em",
+                          color:
+                            li === 0 ? "#ffffff" : "rgba(255,255,255,0.4)",
+                          transformOrigin: "-8em 50%",
+                          transform: `rotate(${rot}deg)`,
+                          transition: doTransition
+                            ? `transform 1s cubic-bezier(0.34, 0, 0, 1) ${li * 0.09}s`
+                            : "none",
+                        }}
+                      >
+                        {text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Mobile copy + CTA */}
+        <div className="relative space-y-6">
+          <p className="text-sm text-white/50 leading-[1.85]">
+            Bespoke applications, Business Central &amp; outsourced HR —
+            powering businesses across East Africa.
+          </p>
+          <div className="flex gap-3">
+            <Link
+              href="#services"
+              className="bg-white text-black text-sm font-semibold px-6 py-3.5 hover:bg-gray-100 transition-colors"
+            >
+              Services
+            </Link>
+            <Link
+              href="#contact"
+              className="border border-white/25 text-white text-sm font-semibold px-6 py-3.5 hover:border-white/50 transition-all"
+            >
+              Contact
+            </Link>
+          </div>
+          <div className="flex items-center gap-4 pt-2">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToSlide(i)}
+                aria-label={`Go to slide ${i + 1}`}
+              >
+                <span
+                  className="block h-px transition-all duration-500"
+                  style={{
+                    width: i === activeIndex ? "1.5rem" : "0.5rem",
+                    backgroundColor:
+                      i === activeIndex ? "#ffffff" : "rgba(255,255,255,0.25)",
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -111,6 +111,43 @@ export default function Services() {
             </ScrollReveal>
           ))}
         </div>
+
+        {/* Capability list — two columns, metajive TwoColumnTextList style */}
+        <ScrollReveal className="mt-24 pt-16 border-t border-white/5" delay={80}>
+          <p className="inline-flex items-center gap-3 text-xs tracking-[0.3em] text-gray-500 uppercase mb-10">
+            <span className="w-5 h-px bg-gray-600 inline-block" />
+            Full Capability List
+          </p>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-0">
+            {[
+              "Bespoke Web Applications",
+              "Microsoft Dynamics 365 Business Central",
+              "Mobile App Design & Development",
+              "Outsourced HR & Payroll",
+              "API Development & Integrations",
+              "ERP Customisations & Extensions",
+              "Enterprise System Architecture",
+              "Statutory Compliance Management",
+              "Digital Product Strategy",
+              "Leave & Attendance Management",
+              "Business Process Automation",
+              "Ongoing Support & Managed Services",
+            ].map((item, i) => (
+              <li
+                key={item}
+                className={`border-t border-white/5 py-4 px-2 text-sm transition-colors duration-300 hover:text-white cursor-default ${
+                  i % 2 === 0 ? "text-gray-300" : "text-gray-400"
+                } sm:${i % 2 !== 0 ? "border-l border-white/5" : ""}`}
+              >
+                <span className="flex items-center gap-3">
+                  <span className="w-1 h-1 rounded-full bg-white/20 shrink-0" />
+                  {item}
+                </span>
+              </li>
+            ))}
+            <li className="border-t border-white/5 sm:border-l" />
+          </ul>
+        </ScrollReveal>
       </div>
     </section>
   );
