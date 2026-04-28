@@ -107,8 +107,9 @@ export default function Navbar() {
 
       {/* ── Full-screen mobile overlay ── */}
       <div
-        className="fixed inset-0 z-40 md:hidden flex flex-col pointer-events-none"
+        className="fixed inset-0 z-40 md:hidden flex flex-col"
         aria-hidden={!menuOpen}
+        style={{ pointerEvents: menuOpen ? "auto" : "none" }}
       >
         {/* Background panel — scaleY reveal from top */}
         <div
@@ -117,7 +118,6 @@ export default function Navbar() {
             transformOrigin: "top",
             transform: menuOpen ? "scaleY(1)" : "scaleY(0)",
             transitionTimingFunction: "cubic-bezier(0.26, 1, 0.48, 1)",
-            pointerEvents: menuOpen ? "auto" : "none",
           }}
         />
 
