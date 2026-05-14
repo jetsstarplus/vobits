@@ -11,6 +11,10 @@ const footerLinks = {
     { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" },
   ],
+  Legal: [
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+  ],
 };
 
 export default function Footer() {
@@ -78,7 +82,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-t border-white/5 pt-8">
           <p className="text-xs text-gray-600">
-            © 2025 Vobits Limited. All rights reserved.
+            © {new Date().getFullYear()} Vobits Limited. All rights reserved.
           </p>
           <p className="text-xs text-gray-700">vobits.ke</p>
         </div>
