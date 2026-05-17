@@ -5,10 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 const navLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Products", href: "#products" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services", href: "/#services" },
+  { label: "Products", href: "/#products" },
+  { label: "About", href: "/#about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -67,7 +67,7 @@ export default function Navbar() {
           </div>
 
           <Link
-            href="#contact"
+            href="/contact"
             className="hidden md:inline-flex items-center border border-white/15 text-white text-sm px-5 py-2 hover:bg-white hover:text-black transition-all duration-200"
           >
             Let&apos;s Talk
@@ -164,7 +164,7 @@ export default function Navbar() {
                 <p className="text-[0.75rem] text-white/30 mt-1">vobits.ke</p>
               </div>
               <Link
-                href="#contact"
+                href="/contact"
                 onClick={close}
                 className="bg-white text-black text-sm font-semibold px-6 py-3 hover:bg-gray-100 transition-colors"
               >

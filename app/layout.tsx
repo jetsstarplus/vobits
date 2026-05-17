@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Cursor from "./components/Cursor";
 import Script from "next/script";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -103,8 +105,11 @@ export default function RootLayout({
           ))}
         </div>
         <Cursor />
+        <Navbar />        
         {children}
         {/* JSON-LD structured data */}
+      <Footer />
+          
         <Script
           id="json-ld-org"
           type="application/ld+json"
