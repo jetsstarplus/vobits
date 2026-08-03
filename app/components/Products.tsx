@@ -111,10 +111,10 @@ export default function Products() {
               <div>
                 <div className="flex items-center gap-3 mb-10">
                   <span className="text-xs border border-blue-500/25 text-blue-400 px-3 py-1 uppercase tracking-wider font-mono">
-                    In Development
+                    Live Product
                   </span>
                   <span className="text-xs border border-white/10 text-gray-500 px-3 py-1 uppercase tracking-wider font-mono">
-                    Coming Soon
+                    Success Story
                   </span>
                 </div>
 
