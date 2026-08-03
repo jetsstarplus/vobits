@@ -81,6 +81,83 @@ export default function Products() {
             </div>
           </ScrollReveal>
         </div>
+
+        {/* Accreditation & Licensing Systems */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5 mt-px">
+          {/* Visual */}
+          <ScrollReveal className="relative bg-[#080808] min-h-80 group order-last lg:order-first" delay={80}>
+            <ParallaxImage
+              src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80&auto=format&fit=crop"
+              alt="Official documents and stamps — accreditation and licensing"
+              className="brightness-40"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              speed={60}
+            />
+            <div className="absolute inset-0 bg-linear-to-br from-blue-950/40 via-transparent to-[#080808]/60" />
+            <div className="absolute inset-0 bg-linear-to-t from-[#080808]/70 via-transparent to-transparent" />
+            <div className="absolute bottom-6 right-6 text-right select-none pointer-events-none">
+              <p className="text-3xl font-black text-blue-400/20 tracking-tight leading-none">
+                CERTIFY
+              </p>
+              <p className="text-sm font-black text-blue-400/15 tracking-widest">
+                SYSTEM
+              </p>
+            </div>
+          </ScrollReveal>
+
+          {/* Content */}
+          <ScrollReveal className="bg-[#0c0c0c]" delay={200}>
+            <div className="p-14 flex flex-col justify-between min-h-96">
+              <div>
+                <div className="flex items-center gap-3 mb-10">
+                  <span className="text-xs border border-blue-500/25 text-blue-400 px-3 py-1 uppercase tracking-wider font-mono">
+                    In Development
+                  </span>
+                  <span className="text-xs border border-white/10 text-gray-500 px-3 py-1 uppercase tracking-wider font-mono">
+                    Coming Soon
+                  </span>
+                </div>
+
+                <h3 className="text-5xl font-black text-white tracking-tight mb-5">
+                  Accreditation &amp; Licensing
+                </h3>
+
+                <p className="text-[0.95rem] text-gray-400 leading-[1.9] max-w-md mb-10">
+                  A purpose-built platform for regulatory bodies, professional
+                  associations, and government agencies to manage the full
+                  lifecycle of accreditations, licences, and certifications —
+                  from application and verification through to renewals and
+                  compliance tracking.
+                </p>
+
+                <ul className="space-y-2 mb-10">
+                  {[
+                    "Online application & document submission",
+                    "Automated verification workflows",
+                    "Licence issuance & digital certificates",
+                    "Renewal reminders & expiry management",
+                    "Public licence registry & search",
+                  ].map((feat) => (
+                    <li key={feat} className="flex items-start gap-3 text-sm text-gray-500">
+                      <span className="mt-2 w-1 h-1 rounded-full bg-blue-400/60 shrink-0" />
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <a
+                href="#contact"
+                className="group inline-flex items-center gap-3 text-white text-sm font-semibold w-fit border-b border-white/20 pb-1.5 hover:border-white transition-colors"
+              >
+                Enquire about this product
+                <span className="group-hover:translate-x-1.5 transition-transform inline-block">
+                  →
+                </span>
+              </a>
+            </div>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
