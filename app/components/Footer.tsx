@@ -1,16 +1,17 @@
 import Link from "next/link";
 
-const footerLinks = {
+const columns: Record<string, { label: string; href: string; external?: boolean }[]> = {
   Services: [
-    { label: "Bespoke Development", href: "#services" },
-    { label: "Business Central", href: "#services" },
-    { label: "HR & Payroll", href: "#services" },
+    { label: "Bespoke Development", href: "/#services" },
+    { label: "Business Central", href: "/#services" },
+    { label: "HR & Payroll", href: "/#services" },
+  ],
+  Company: [
+    { label: "About", href: "/#about" },
+    { label: "Process", href: "/#process" },
+    { label: "Contact", href: "/contact" },
   ],
   Products: [{ label: "miliki.ke", href: "https://miliki.ke", external: true }],
-  Company: [
-    { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
-  ],
   Legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
@@ -19,74 +20,70 @@ const footerLinks = {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/5 px-6 pt-20 pb-10 bg-[#060606]">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
-          {/* Brand */}
-          <div className="lg:col-span-1">
-            <Link
-              href="/"
-              className="text-white font-black text-lg tracking-[0.2em] block mb-5 hover:opacity-75 transition-opacity"
-            >
-              VOBITS
-            </Link>
-            <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-xs">
-              Building digital solutions that power businesses across East
-              Africa.
+    <footer className="relative overflow-hidden border-t border-line bg-[#050607] px-5 pt-20 sm:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(4,1fr)]">
+          <div>
+            <p className="max-w-xs text-lg leading-snug text-white">
+              Building the systems East African businesses{" "}
+              <span className="font-serif italic text-accent">run on.</span>
             </p>
-            <p className="text-sm text-gray-600">Nairobi, Kenya</p>
+            <p className="mt-6 text-sm text-muted">Nairobi, Kenya</p>
             <a
               href="mailto:hello@vobits.ke"
-              className="text-sm text-gray-600 hover:text-gray-400 transition-colors mt-1 block"
+              className="mt-1 inline-block text-sm text-white/70 transition-colors hover:text-accent"
             >
               hello@vobits.ke
             </a>
           </div>
 
-          {/* Links */}
-          {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
-              <p className="text-xs tracking-[0.2em] text-gray-500 uppercase mb-5">
-                {category}
-              </p>
-              <ul className="flex flex-col gap-3">
-                {links.map(
-                  (link: { label: string; href: string; external?: boolean }) =>
-                    link.external ? (
-                      <li key={link.label}>
+          <div className="grid grid-cols-2 gap-10 sm:grid-cols-4 md:col-span-4">
+            {Object.entries(columns).map(([title, links]) => (
+              <div key={title}>
+                <p className="mb-5 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted">
+                  {title}
+                </p>
+                <ul className="flex flex-col gap-3">
+                  {links.map((l) => (
+                    <li key={l.label}>
+                      {l.external ? (
                         <a
-                          href={link.href}
+                          href={l.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-gray-500 hover:text-white transition-colors"
+                          className="text-sm text-white/60 transition-colors hover:text-white"
                         >
-                          {link.label}
+                          {l.label} ↗
                         </a>
-                      </li>
-                    ) : (
-                      <li key={link.label}>
+                      ) : (
                         <Link
-                          href={link.href}
-                          className="text-sm text-gray-500 hover:text-white transition-colors"
+                          href={l.href}
+                          className="text-sm text-white/60 transition-colors hover:text-white"
                         >
-                          {link.label}
+                          {l.label}
                         </Link>
-                      </li>
-                    )
-                )}
-              </ul>
-            </div>
-          ))}
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-t border-white/5 pt-8">
-          <p className="text-xs text-gray-600">
-            © {new Date().getFullYear()} Vobits Limited. All rights reserved.
-          </p>
-          <p className="text-xs text-gray-700">vobits.ke</p>
+        <div className="mt-20 flex flex-col justify-between gap-3 border-t border-line py-6 text-xs text-white/35 sm:flex-row">
+          <p>© {new Date().getFullYear()} Vobits Limited. All rights reserved.</p>
+          <p>vobits.ke</p>
         </div>
       </div>
+
+      {/* Oversized wordmark */}
+      <p
+        aria-hidden
+        className="text-outline pointer-events-none mb-[-0.18em] select-none text-center text-[24vw] font-black leading-none tracking-[-0.06em]"
+      >
+        VOBITS
+      </p>
     </footer>
   );
 }

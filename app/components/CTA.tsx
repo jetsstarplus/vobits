@@ -1,52 +1,53 @@
-import ScrollReveal from "./ScrollReveal";
+"use client";
+
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { ButtonLink } from "./ui/Button";
+import { Chapter, LineReveal, Reveal } from "./ui/Motion";
 
 export default function CTA() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+  const glowScale = useTransform(scrollYProgress, [0, 1], [0.4, 1.15]);
+  const glowOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   return (
-    <section id="contact" className="py-32 px-6 border-t border-white/5">
-      <div className="max-w-7xl mx-auto">
-        <div className="relative bg-[#0c0c0c] border border-white/5 px-10 py-24 md:px-24 overflow-hidden">
-          {/* Background glow */}
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(59,130,246,0.06),transparent_60%)]" />
+    <section
+      ref={ref}
+      id="start"
+      data-chapter
+      className="relative isolate overflow-hidden border-t border-line px-5 py-32 sm:px-8 md:py-48"
+    >
+      <motion.div
+        aria-hidden
+        style={{ scale: glowScale, opacity: glowOpacity }}
+        className="absolute left-1/2 top-full -z-10 aspect-square w-[160vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(200,255,77,0.22),rgba(200,255,77,0.05)_55%,transparent)] md:w-[110vw]"
+      />
 
-          <div className="relative text-center">
-            <ScrollReveal>
-              <p className="inline-flex items-center gap-3 text-xs tracking-[0.3em] text-gray-500 uppercase mb-8">
-                <span className="w-5 h-px bg-gray-600 inline-block" />
-                Get In Touch
-                <span className="w-5 h-px bg-gray-600 inline-block" />
-              </p>
-
-              <h2 className="text-5xl md:text-7xl font-black text-white leading-none tracking-tight mb-8">
-                Ready to build
-                <br />
-                <span className="text-gray-500">something great?</span>
-              </h2>
-            </ScrollReveal>
-
-            <ScrollReveal delay={120}>
-              <p className="text-[0.95rem] text-gray-400 max-w-xl mx-auto mb-14 leading-[1.85]">
-                Whether you need a custom application, a Business Central
-                implementation, or outsourced HR services — let&apos;s start a
-                conversation.
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href="mailto:hello@vobits.ke"
-                  className="bg-white text-black font-semibold text-sm px-10 py-4 hover:bg-gray-100 transition-colors"
-                >
-                  hello@vobits.ke
-                </a>
-                <a
-                  href="#"
-                  className="border border-white/15 text-white font-semibold text-sm px-10 py-4 hover:border-white/40 transition-colors"
-                >
-                  Schedule a Call
-                </a>
-              </div>
-            </ScrollReveal>
+      <div className="mx-auto flex max-w-7xl flex-col items-center text-center">
+        <Chapter n="05" label="Your next step" className="mb-10" />
+        <LineReveal
+          className="text-[clamp(3rem,11vw,9.5rem)] font-semibold leading-[0.92] tracking-[-0.05em] text-white"
+          lines={[
+            "Let's remove",
+            <span key="l" className="font-serif font-normal italic text-accent">
+              the friction.
+            </span>,
+          ]}
+        />
+        <Reveal delay={0.2} className="mt-10 flex flex-col items-center gap-10">
+          <p className="max-w-lg text-base leading-relaxed text-white/60 sm:text-lg">
+            Tell us where things get stuck. We&apos;ll come back with a clear
+            plan — whether that&apos;s a custom application, a Business Central
+            rollout or taking payroll off your plate.
+          </p>
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <ButtonLink href="/contact">Start a project</ButtonLink>
+            <ButtonLink href="mailto:hello@vobits.ke" variant="ghost">
+              hello@vobits.ke
+            </ButtonLink>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

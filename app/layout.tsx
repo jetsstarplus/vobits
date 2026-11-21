@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import Cursor from "./components/Cursor";
 import Script from "next/script";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import { MotionProvider, ScrollProgress } from "./components/ui/Motion";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,6 +15,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -95,21 +103,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#080808] text-[#f0f0f0]">
-        {/* Subtle vertical grid column overlay lines */}
-        <div className="grid-lines" aria-hidden="true">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <span key={i} />
-          ))}
-        </div>
-        <Cursor />
-        <Navbar />        
-        {children}
-        {/* JSON-LD structured data */}
-      <Footer />
-          
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-black"
+        >
+          Skip to content
+        </a>
+        <MotionProvider>
+          <ScrollProgress />
+          <Cursor />
+          <Navbar />
+          <div id="content" className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </MotionProvider>
+
         <Script
           id="json-ld-org"
           type="application/ld+json"

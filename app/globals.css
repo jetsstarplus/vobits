@@ -1,206 +1,175 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────
+   Design tokens
+   ───────────────────────────────────────────────────────── */
 :root {
-  --background: #080808;
-  --foreground: #f0f0f0;
+  --bg: #07080a;
+  --fg: #f2f1ec;
+  --accent: #c8ff4d;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-accent: var(--accent);
+  --color-surface: #0e1013;
+  --color-surface-2: #14171b;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-muted: #8b9098;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 64px;
+  scroll-padding-top: 88px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-geist-sans, system-ui, sans-serif);
-  /* Smooth background color morph driven by SectionColorManager */
-  transition: background-color 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-rendering: optimizeLegibility;
 }
 
-/* Custom scrollbar */
+::selection {
+  background: var(--accent);
+  color: #07080a;
+}
+
+/* Film grain — adds tactile depth to flat dark surfaces */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #080808;
+  background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
-  border-radius: 2px;
+  background: #23262b;
+  border-radius: 99px;
+}
+
+/* Accessible focus */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Custom cursor (enabled only on fine pointers by <Cursor />) */
+html.has-custom-cursor,
+html.has-custom-cursor a,
+html.has-custom-cursor button {
+  cursor: none;
+}
+html.has-custom-cursor input,
+html.has-custom-cursor textarea {
+  cursor: text;
 }
 
 /* ─── Marquee ─────────────────────────────────── */
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.marquee-track {
-  animation: marquee 35s linear infinite;
-  will-change: transform;
-}
-
-/* ─── Hero — line clip reveal (legacy) ─────────── */
-@keyframes heroLine {
-  from { transform: translateY(110%); }
-  to   { transform: translateY(0); }
-}
-.hero-line {
-  animation: heroLine 1s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* ─── Hero — rotation clip reveal (metajive-style) */
-@keyframes heroRotate {
-  from { transform: rotate(8deg); opacity: 0; }
-  to   { transform: rotate(0deg); opacity: 1; }
-}
-
-/* ─── Mobile hero word reveal ─────────────────── */
-@keyframes mobileWordReveal {
   from {
-    opacity: 0;
-    transform: rotate(5deg) translateY(110%);
+    transform: translateX(0);
   }
   to {
-    opacity: 1;
-    transform: rotate(0deg) translateY(0%);
+    transform: translateX(-50%);
   }
 }
-.hero-rotate {
-  animation: heroRotate 1s cubic-bezier(0.16, 1, 0.3, 1) both;
-  transform-origin: -5em 0;
-  display: block;
+.marquee-track {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+  animation-direction: var(--marquee-direction, normal);
+  will-change: transform;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 
-/* ─── Hero — fade + rise (eyebrow, body, buttons) */
-@keyframes heroFade {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ─── Hero scroll cue ─────────────────────────── */
+@keyframes scroll-cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
 }
-.hero-fade {
-  animation: heroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* ─── Scroll reveal ───────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(38px);
-  transition:
-    opacity  0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ─── Horizontal slide reveal (for labels/lines) */
-.reveal-x {
-  opacity: 0;
-  transform: translateX(-24px);
-  transition:
-    opacity  0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal-x.is-visible {
-  opacity: 1;
-  transform: translateX(0);
+.scroll-cue {
+  animation: scroll-cue 2.2s var(--ease-out-expo) infinite;
 }
 
-/* ─── Scale reveal (for stat boxes) ──────────── */
-.reveal-scale {
-  opacity: 0;
-  transform: scale(0.94);
-  transition:
-    opacity   0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+/* Spotlight card — glow follows pointer via CSS vars */
+.spotlight {
+  --mx: 50%;
+  --my: 50%;
 }
-.reveal-scale.is-visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* ─── Expanding underline for nav links ─────── */
-.nav-link {
-  position: relative;
-}
-.nav-link::after {
+.spotlight::before {
   content: "";
   position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: white;
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ─── Animated sliding underline (metajive-style) */
-@keyframes slideUnderline {
-  from { background-position-x: 0; }
-  to   { background-position-x: -166.6666%; }
-}
-.link-underline {
-  text-decoration: none;
-  background: linear-gradient(90deg, currentcolor, currentcolor 40%, transparent 0, transparent);
-  background-repeat: repeat-x;
-  background-position: 0 100%;
-  background-size: 250% 1px;
-}
-.link-underline:hover {
-  animation: slideUnderline 0.5s cubic-bezier(0.34, 0, 0, 1);
-}
-
-/* ─── Vertical grid column overlay lines ──────── */
-.grid-lines {
-  position: fixed;
   inset: 0;
+  border-radius: inherit;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    600px circle at var(--mx) var(--my),
+    color-mix(in srgb, var(--spot, var(--accent)) 14%, transparent),
+    transparent 40%
+  );
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  padding-inline: clamp(1.5rem, 5vw, 3rem);
-  gap: 0;
 }
-.grid-lines > span {
-  border-left: 1px solid rgba(255, 255, 255, 0.028);
-}
-.grid-lines > span:last-child {
-  border-right: 1px solid rgba(255, 255, 255, 0.028);
+.spotlight:hover::before {
+  opacity: 1;
 }
 
-/* ─── Section bottom-bleed transition ─────────── */
-.section-bleed-bottom {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 180px;
-  pointer-events: none;
-  background: linear-gradient(to bottom, transparent, var(--section-bg, #080808));
-}
-.nav-link:hover::after {
-  width: 100%;
+/* Outline display text */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 0.14);
 }
 
-/* ─── Dynamic navbar background (matches section color) */
-.nav-scrolled {
-  background-color: var(--section-nav, #080808f0);
-  transition: background-color 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
-
-/* ─── Glowing border on service card hover ─── */
-.service-card {
-  transition: background-color 0.3s ease, box-shadow 0.4s ease;
-}
-.service-card:hover {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-

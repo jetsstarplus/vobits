@@ -1,21 +1,31 @@
 import Hero from "./components/Hero";
+import Manifesto from "./components/Manifesto";
 import Marquee from "./components/Marquee";
-import About from "./components/About";
 import Services from "./components/Services";
+import Process from "./components/Process";
+import Impact from "./components/Impact";
 import Testimonials from "./components/Testimonials";
-import Products from "./components/Products";
-import SectionColorManager from "./components/SectionColorManager";
+import CTA from "./components/CTA";
+import JourneyNav from "./components/JourneyNav";
 
+/**
+ * The homepage is told as a five-chapter journey:
+ * Hero (chaos → order) → 01 Friction → 02 What we do → 03 How we work
+ * → 04 Proof → 05 Next step.
+ */
 export default function Home() {
   return (
-    <>
-      <SectionColorManager />
+    <main>
+      <JourneyNav />
       <Hero />
+      <Manifesto />
       <Marquee />
-      <About />
       <Services />
+      <Process />
+      <Impact />
       <Testimonials />
-      <Products />
-    </>
+      <Marquee reverse />
+      <CTA />
+    </main>
   );
 }

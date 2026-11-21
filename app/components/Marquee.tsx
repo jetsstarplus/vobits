@@ -2,32 +2,38 @@ const items = [
   "Bespoke Development",
   "Business Central",
   "HR & Payroll",
-  "Digital Transformation",
-  "Enterprise Software",
-  "Cloud Solutions",
-  "API Development",
-  "Mobile Applications",
-  "ERP Implementation",
+  "API Integrations",
+  "Mobile Apps",
+  "ERP Customisation",
   "Payroll Automation",
+  "Digital Products",
 ];
 
-// Double the array so the animation loops seamlessly
-const doubled = [...items, ...items];
-
-export default function Marquee() {
+function Row({ hidden }: { hidden?: boolean }) {
   return (
-    <div className="border-y border-white/5 overflow-hidden py-5 bg-[#0b0b0b]">
-      <div className="flex whitespace-nowrap">
-        <div className="marquee-track flex shrink-0 items-center">
-          {doubled.map((item, i) => (
-            <span key={i} className="flex items-center">
-              <span className="text-xs font-semibold text-gray-600 uppercase tracking-[0.2em] px-7">
-                {item}
-              </span>
-              <span className="text-gray-700 text-xs">◆</span>
-            </span>
-          ))}
-        </div>
+    <ul aria-hidden={hidden} className="flex shrink-0 items-center">
+      {items.map((item) => (
+        <li key={item} className="flex items-center">
+          <span className="px-6 text-[clamp(1.5rem,4vw,3rem)] font-semibold tracking-[-0.03em] text-white/85 sm:px-10">
+            {item}
+          </span>
+          <span className="font-serif text-2xl italic text-accent">✦</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Capability band — a visual breath between chapters. */
+export default function Marquee({ reverse = false }: { reverse?: boolean }) {
+  return (
+    <div
+      className="marquee overflow-hidden border-y border-line py-6 sm:py-8"
+      style={{ ["--marquee-direction" as string]: reverse ? "reverse" : "normal" }}
+    >
+      <div className="marquee-track flex w-max">
+        <Row />
+        <Row hidden />
       </div>
     </div>
   );

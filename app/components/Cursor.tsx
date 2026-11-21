@@ -1,101 +1,69 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { useMediaQuery } from "../lib/useMediaQuery";
 
+/** Blend-mode cursor that grows over interactive elements. Fine pointers only. */
 export default function Cursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const fine = useMediaQuery("(pointer: fine)");
+  const reduce = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const enabled = fine && !reduce;
+  const [hovering, setHovering] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const sx = useSpring(x, { stiffness: 450, damping: 38, mass: 0.5 });
+  const sy = useSpring(y, { stiffness: 450, damping: 38, mass: 0.5 });
 
   useEffect(() => {
-    // Only enable on pointer-fine (mouse) devices
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (!enabled) return;
+    const root = document.documentElement;
+    root.classList.add("has-custom-cursor");
 
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-    if (!dot || !ring) return;
-
-    dot.style.display = "block";
-    ring.style.display = "block";
-    document.body.style.cursor = "none";
-
-    let mx = -200,
-      my = -200,
-      rx = -200,
-      ry = -200;
-    let targetSize = 28;
-    let raf: number;
-
-    const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
+    const move = (e: PointerEvent) => {
+      x.set(e.clientX);
+      y.set(e.clientY);
+      setVisible(true);
     };
-
-    const onEnter = () => {
-      targetSize = 52;
-      ring.style.borderColor = "rgba(255,255,255,0.45)";
-      dot.style.transform =
-        "translate(" + (mx - 3) + "px," + (my - 3) + "px) scale(0.5)";
+    const over = (e: PointerEvent) => {
+      const t = e.target as Element | null;
+      setHovering(!!t?.closest("a, button, [role='button'], label, summary"));
     };
-    const onLeave = () => {
-      targetSize = 28;
-      ring.style.borderColor = "rgba(255,255,255,0.2)";
-      dot.style.transform =
-        "translate(" + (mx - 3) + "px," + (my - 3) + "px) scale(1)";
-    };
+    const leave = () => setVisible(false);
 
-    const attach = () => {
-      document.querySelectorAll("a, button").forEach((el) => {
-        el.addEventListener("mouseenter", onEnter);
-        el.addEventListener("mouseleave", onLeave);
-      });
-    };
-    attach();
-
-    // Re-attach when DOM changes (Next.js navigation)
-    const mo = new MutationObserver(attach);
-    mo.observe(document.body, { childList: true, subtree: true });
-
-    const animate = () => {
-      // Dot — instant
-      dot.style.transform =
-        "translate(" + (mx - 3) + "px," + (my - 3) + "px)";
-
-      // Ring — lerp
-      rx += (mx - rx) * 0.1;
-      ry += (my - ry) * 0.1;
-      const half = targetSize / 2;
-      ring.style.width = targetSize + "px";
-      ring.style.height = targetSize + "px";
-      ring.style.transform =
-        "translate(" + (rx - half) + "px," + (ry - half) + "px)";
-
-      raf = requestAnimationFrame(animate);
-    };
-    raf = requestAnimationFrame(animate);
-
-    document.addEventListener("mousemove", onMove);
-
+    window.addEventListener("pointermove", move, { passive: true });
+    document.addEventListener("pointerover", over, { passive: true });
+    document.documentElement.addEventListener("pointerleave", leave);
     return () => {
-      document.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-      mo.disconnect();
-      document.body.style.cursor = "";
+      root.classList.remove("has-custom-cursor");
+      window.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerover", over);
+      document.documentElement.removeEventListener("pointerleave", leave);
     };
-  }, []);
+  }, [enabled, x, y]);
+
+  if (!enabled) return null;
 
   return (
     <>
-      {/* Dot — follows cursor exactly */}
-      <div
-        ref={dotRef}
-        style={{ display: "none" }}
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full pointer-events-none z-9999 transition-transform duration-150"
+      <motion.div
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-0 z-100 h-10 w-10 rounded-full border border-white mix-blend-difference"
+        style={{ x: sx, y: sy, translateX: "-50%", translateY: "-50%" }}
+        animate={{
+          scale: hovering ? 1.6 : 1,
+          opacity: visible ? 1 : 0,
+          backgroundColor: hovering ? "rgba(255,255,255,1)" : "rgba(255,255,255,0)",
+        }}
+        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
       />
-      {/* Ring — lerps behind cursor */}
-      <div
-        ref={ringRef}
-        style={{ display: "none" }}
-        className="fixed top-0 left-0 rounded-full border pointer-events-none z-9998 transition-[width,height,border-color] duration-300"
+      <motion.div
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-0 z-100 h-1.5 w-1.5 rounded-full bg-white mix-blend-difference"
+        style={{ x, y, translateX: "-50%", translateY: "-50%" }}
+        animate={{ opacity: visible && !hovering ? 1 : 0 }}
       />
     </>
   );
