@@ -5,10 +5,11 @@ import { AnimatePresence, motion } from "motion/react";
 
 const chapters = [
   { id: "about", n: "01", label: "The friction" },
-  { id: "services", n: "02", label: "What we do" },
-  { id: "process", n: "03", label: "How we work" },
-  { id: "proof", n: "04", label: "The proof" },
-  { id: "start", n: "05", label: "Next step" },
+  { id: "sectors", n: "02", label: "Who we serve" },
+  { id: "services", n: "03", label: "What we do" },
+  { id: "process", n: "04", label: "How we work" },
+  { id: "proof", n: "05", label: "The proof" },
+  { id: "start", n: "06", label: "Next step" },
 ];
 
 /** Fixed chapter indicator (large screens) — keeps the journey legible. */

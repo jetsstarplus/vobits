@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { animate, useInView, useReducedMotion } from "motion/react";
 import { Chapter, LineReveal, Reveal } from "./ui/Motion";
@@ -13,6 +14,22 @@ const stats = [
 ];
 
 const products = [
+  {
+    name: "NGO Project Management",
+    kicker: "Product",
+    body: "Built for NGOs and development programmes: plan projects, track spending against every grant and report to donors with confidence.",
+    features: [
+      "Projects, activities & work plans",
+      "Grant budgets vs. actuals in real time",
+      "Indicators & results tracking (M&E)",
+      "Donor‑ready reports",
+    ],
+    cta: { label: "Request a demo", href: "/contact" },
+    accent: "#ffb547",
+    image:
+      "https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=1200&q=80&auto=format&fit=crop",
+    alt: "Team members joining hands — collaborative project work",
+  },
   {
     name: "miliki.ke",
     kicker: "Live product",
@@ -70,7 +87,7 @@ export default function Impact() {
   return (
     <section id="proof" data-chapter className="relative border-t border-line px-5 py-28 sm:px-8 md:py-40">
       <div className="mx-auto max-w-7xl">
-        <Chapter n="04" label="The proof" className="mb-8" />
+        <Chapter n="05" label="The proof" className="mb-8" />
         <LineReveal
           className="max-w-4xl text-[clamp(2.4rem,5.5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
           lines={[
@@ -95,15 +112,42 @@ export default function Impact() {
           ))}
         </dl>
 
+        {/* Credential */}
+        <Reveal className="mt-6">
+          <div className="flex flex-col gap-6 rounded-3xl border border-line bg-surface p-7 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+            <div className="flex items-center gap-5">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-accent/10 text-accent">
+                <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" aria-hidden>
+                  <path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                  <path d="M8.5 12l2.5 2.5L15.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <div>
+                <p className="text-xl font-semibold tracking-tight text-white sm:text-2xl">Microsoft Partner</p>
+                <p className="mt-1 max-w-xl text-sm leading-relaxed text-white/55">
+                  We implement, extend and support Microsoft Dynamics 365 Business Central — with the
+                  backing of Microsoft&apos;s partner network and tooling.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/#services"
+              className="w-fit shrink-0 border-b border-white/20 pb-1 text-sm font-semibold text-white transition-colors hover:border-white"
+            >
+              Our Business Central services →
+            </Link>
+          </div>
+        </Reveal>
+
         {/* Products */}
         <div id="products" className="mt-28 scroll-mt-28">
           <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <h3 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Homegrown products, <span className="text-white/40">solving real problems.</span>
+              Our products, <span className="text-white/40">solving real problems.</span>
             </h3>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {products.map((p, i) => (
               <Reveal key={p.name} delay={i * 0.12}>
                 <article
@@ -120,7 +164,7 @@ export default function Impact() {
                       src={p.image}
                       alt={p.alt}
                       fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       className="object-cover brightness-50 saturate-[0.8] transition-transform duration-1000 ease-out-expo group-hover:scale-105"
                     />
                     <div className="absolute inset-0 opacity-30 mix-blend-color" style={{ background: p.accent }} />
@@ -134,7 +178,7 @@ export default function Impact() {
                   </div>
 
                   <div className="relative z-2 flex flex-1 flex-col p-7 sm:p-10">
-                    <h4 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                    <h4 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
                       {p.name}
                     </h4>
                     <p className="mt-4 text-[0.95rem] leading-relaxed text-white/55">{p.body}</p>

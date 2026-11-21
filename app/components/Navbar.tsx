@@ -14,6 +14,7 @@ import { ButtonLink } from "./ui/Button";
 import { EASE } from "./ui/Motion";
 
 const navLinks = [
+  { label: "Sectors", href: "/#sectors" },
   { label: "Services", href: "/#services" },
   { label: "Process", href: "/#process" },
   { label: "Work", href: "/#products" },
@@ -67,12 +68,12 @@ export default function Navbar() {
         >
           <Link href="/" onClick={close} className="relative z-10 transition-opacity hover:opacity-75">
             <Image
-              src="/Vobits_logo.png"
+              src="/brand/vobits-logo-reversed.svg"
               alt="Vobits — home"
-              width={120}
-              height={36}
-              className="h-7 w-auto"
-              style={{ filter: "brightness(0) invert(1)" }}
+              width={124}
+              height={27}
+              className="h-6.5 w-auto"
+              unoptimized
               priority
             />
           </Link>

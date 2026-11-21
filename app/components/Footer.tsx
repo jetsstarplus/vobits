@@ -11,7 +11,11 @@ const columns: Record<string, { label: string; href: string; external?: boolean 
     { label: "Process", href: "/#process" },
     { label: "Contact", href: "/contact" },
   ],
-  Products: [{ label: "miliki.ke", href: "https://miliki.ke", external: true }],
+  Products: [
+    { label: "NGO Project Management", href: "/#products" },
+    { label: "Accreditation & Licensing", href: "/#products" },
+    { label: "miliki.ke", href: "https://miliki.ke", external: true },
+  ],
   Legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
@@ -28,7 +32,10 @@ export default function Footer() {
               Building the systems East African businesses{" "}
               <span className="font-serif italic text-accent">run on.</span>
             </p>
-            <p className="mt-6 text-sm text-muted">Nairobi, Kenya</p>
+            <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Microsoft Partner
+            </p>
+            <p className="mt-6 text-sm text-muted">P.O. Box 54229 – 00200, Nairobi, Kenya</p>
             <a
               href="mailto:hello@vobits.ke"
               className="mt-1 inline-block text-sm text-white/70 transition-colors hover:text-accent"

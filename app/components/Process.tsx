@@ -43,7 +43,7 @@ export default function Process() {
     <section id="process" data-chapter className="relative px-5 py-28 sm:px-8 md:py-40">
       <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1fr_1.2fr] lg:gap-24">
         <div className="lg:sticky lg:top-32 lg:self-start">
-          <Chapter n="03" label="How we work" className="mb-8" />
+          <Chapter n="04" label="How we work" className="mb-8" />
           <LineReveal
             className="text-[clamp(2.4rem,5.5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white"
             lines={[

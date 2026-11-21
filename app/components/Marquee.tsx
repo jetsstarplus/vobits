@@ -1,6 +1,8 @@
 const items = [
+  "Microsoft Partner",
   "Bespoke Development",
   "Business Central",
+  "NGO Project Management",
   "HR & Payroll",
   "API Integrations",
   "Mobile Apps",

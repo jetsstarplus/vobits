@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Vobits Limited — Dated Stamp Generator</title>
+<style>
+  @font-face { font-family: "GeistStamp"; src: url(data:font/woff2;base64,__FONT__) format("woff2"); font-weight: 700; }
+  :root { --navy:#0E1A2B; --blue:#1E6FD9; --line:#e5e7eb; }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--navy); background:#f6f7f9; }
+  main { max-width: 980px; margin: 0 auto; padding: 40px 20px; display:grid; gap:32px; grid-template-columns: 1fr; }
+  @media (min-width: 820px) { main { grid-template-columns: 320px 1fr; } }
+  h1 { font-size: 22px; margin:0 0 4px; } p.sub { margin:0 0 24px; color:#6b7280; font-size:14px; }
+  label { display:block; font-weight:600; font-size:13px; margin:18px 0 6px; }
+  input, select { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; font:inherit; background:#fff; }
+  .row { display:flex; gap:8px; align-items:center; margin-top:18px; }
+  .row input { width:auto; }
+  .swatches { display:flex; gap:8px; }
+  .swatches button { width:36px; height:36px; border-radius:50%; border:3px solid #fff; box-shadow:0 0 0 1px var(--line); cursor:pointer; }
+  .swatches button[aria-pressed="true"] { box-shadow:0 0 0 2px var(--navy); }
+  .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+  .actions button { padding:10px 16px; border-radius:999px; border:1px solid var(--navy); background:var(--navy); color:#fff; font:inherit; font-weight:600; cursor:pointer; }
+  .actions button.ghost { background:#fff; color:var(--navy); }
+  .stage { background:#fff; border:1px solid var(--line); border-radius:20px; display:grid; place-items:center; padding:32px; min-height:420px;
+           background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 16px 16px; }
+  .stage svg { width:min(100%, 420px); height:auto; }
+  .note { font-size:12px; color:#6b7280; margin-top:16px; }
+  @media print { body{background:#fff} .controls,.note{display:none} main{display:block;padding:0} .stage{border:0;background:none;min-height:0} .stage svg{width:45mm} }
+</style>
+</head>
+<body>
+<main>
+  <section class="controls">
+    <h1>Dated stamp</h1>
+    <p class="sub">Vobits Limited — internal use only.</p>
+
+    <label for="date">Date</label>
+    <input id="date" type="date" />
+
+    <label for="label">Label (below the date)</label>
+    <select id="label">
+      <option value="">— none (Nairobi · Kenya) —</option>
+      <option>Received</option>
+      <option>Approved</option>
+      <option>Paid</option>
+      <option>Verified</option>
+      <option>Certified true copy</option>
+      <option value="__custom">Custom…</option>
+    </select>
+    <input id="custom" type="text" maxlength="22" placeholder="Custom label" style="display:none;margin-top:8px" />
+
+    <label>Ink</label>
+    <div class="swatches" id="inks">
+      <button type="button" data-ink="#1D3C8F" style="background:#1D3C8F" aria-label="Blue ink" aria-pressed="true"></button>
+      <button type="button" data-ink="#B3202A" style="background:#B3202A" aria-label="Red ink" aria-pressed="false"></button>
+      <button type="button" data-ink="#111827" style="background:#111827" aria-label="Black ink" aria-pressed="false"></button>
+      <button type="button" data-ink="#5B2A86" style="background:#5B2A86" aria-label="Purple ink" aria-pressed="false"></button>
+    </div>
+
+    <div class="row"><input id="texture" type="checkbox" /><label for="texture" style="margin:0">Realistic ink texture</label></div>
+    <div class="row"><input id="tilt" type="checkbox" /><label for="tilt" style="margin:0">Slight rotation</label></div>
+
+    <div class="actions">
+      <button type="button" id="png">Download PNG</button>
+      <button type="button" id="svg" class="ghost">Download SVG</button>
+      <button type="button" id="print" class="ghost">Print</button>
+    </div>
+    <p class="note">PNG exports at 1200 × 1200 px with a transparent background — place it over a signature in Word or a PDF editor. Printed size is about 45 mm.</p>
+  </section>
+
+  <section class="stage" id="stage" aria-live="polite"></section>
+</main>
+
+<script>
+const RING = `__RING__`;
+const MARK = `__MARK__`;
+const FILTER = `__INK_FILTER__`;
+const FONT_CSS = document.querySelector("style").textContent.match(/@font-face[^}]+}/)[0];
+const MONTHS = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+
+const $ = (id) => document.getElementById(id);
+const state = { ink: "#1D3C8F" };
+const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+$("date").value = todayISO();
+
+function fmt(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${String(d).padStart(2, "0")} ${MONTHS[m - 1]} ${y}`;
+}
+function esc(s) { return s.replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+
+function buildSvg() {
+  const date = $("date").value ? fmt($("date").value) : "";
+  let label = $("label").value === "__custom" ? $("custom").value : $("label").value;
+  const sub = label ? label.toUpperCase() : "NAIROBI · KENYA";
+  const subSize = label ? 16 : 13;
+  const chord = (y) => Math.sqrt(119 ** 2 - (y - 200) ** 2) - 8;
+  const line = (y) => `<line x1="${200 - chord(y)}" y1="${y}" x2="${200 + chord(y)}" y2="${y}" stroke="currentColor" stroke-width="3"/>`;
+  const tex = $("texture").checked;
+  const rot = $("tilt").checked ? -6 : 0;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" color="${state.ink}">
+<defs><style>${FONT_CSS}</style>${tex ? FILTER : ""}</defs>
+<g transform="rotate(${rot} 200 200)"><g fill="currentColor"${tex ? ' filter="url(#ink)"' : ""}>
+${RING}${MARK}${line(180)}${line(236)}
+<text x="200" y="221" text-anchor="middle" font-family="GeistStamp" font-weight="700" font-size="33" letter-spacing="1.3">${esc(date)}</text>
+<text x="200" y="${label ? 270 : 268}" text-anchor="middle" font-family="GeistStamp" font-weight="700" font-size="${subSize}" letter-spacing="${(subSize * 0.22).toFixed(1)}">${esc(sub)}</text>
+</g></g></svg>`;
+}
+
+function render() { $("stage").innerHTML = buildSvg(); }
+
+function fileName(ext) { return `vobits-stamp-${$("date").value || "undated"}.${ext}`; }
+function download(blob, name) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+$("svg").onclick = () => download(new Blob([buildSvg()], { type: "image/svg+xml" }), fileName("svg"));
+$("png").onclick = async () => {
+  await document.fonts.ready;
+  const img = new Image();
+  img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(buildSvg());
+  await img.decode();
+  const c = document.createElement("canvas"); c.width = c.height = 1200;
+  c.getContext("2d").drawImage(img, 0, 0, 1200, 1200);
+  c.toBlob((b) => download(b, fileName("png")), "image/png");
+};
+$("print").onclick = () => window.print();
+
+$("label").onchange = () => { $("custom").style.display = $("label").value === "__custom" ? "block" : "none"; render(); };
+["date", "custom", "texture", "tilt"].forEach((id) => $(id).addEventListener("input", render));
+$("inks").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.ink = b.dataset.ink;
+  $("inks").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  render();
+});
+document.fonts.load('700 20px "GeistStamp"').then(render);
+render();
+</script>
+</body>
+</html>

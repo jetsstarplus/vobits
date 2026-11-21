@@ -7,6 +7,7 @@ const SERVICES = [
   "Bespoke application",
   "Business Central",
   "HR & Payroll",
+  "NGO project management",
   "Accreditation platform",
   "Not sure yet",
 ];

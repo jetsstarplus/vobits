@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | Vobits Limited",
   },
   description:
-    "Vobits Limited delivers bespoke application development, Microsoft Dynamics 365 Business Central implementations, and outsourced HR & payroll services across East Africa.",
+    "Vobits Limited is a Microsoft partner delivering bespoke software, Microsoft Dynamics 365 Business Central and outsourced HR & payroll for NGOs, professional bodies, government institutions and businesses across East Africa.",
   keywords: [
     "bespoke software Kenya",
     "Microsoft Dynamics 365 Business Central partner Kenya",
@@ -40,6 +40,11 @@ export const metadata: Metadata = {
     "custom software development East Africa",
     "ERP implementation Kenya",
     "software company Nairobi",
+    "Microsoft partner Kenya",
+    "NGO project management software",
+    "NGO grant management Kenya",
+    "licensing system for professional bodies",
+    "government ERP Kenya",
     "Vobits",
   ],
   authors: [{ name: "Vobits Limited", url: "https://vobits.ke" }],
@@ -84,11 +89,6 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
     creator: "@vobits",
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
-  },
   verification: {
     // Replace with your actual Google Search Console verification code
     google: "REPLACE_WITH_GOOGLE_VERIFICATION_CODE",
@@ -131,11 +131,13 @@ export default function RootLayout({
               "@type": "Organization",
               name: "Vobits Limited",
               url: "https://vobits.ke",
-              logo: "https://vobits.ke/Vobits_logo.png",
+              logo: "https://vobits.ke/brand/vobits-logo-primary.png",
               description:
                 "Bespoke application development, Microsoft Dynamics 365 Business Central implementations, and outsourced HR & payroll services across East Africa.",
               address: {
                 "@type": "PostalAddress",
+                postOfficeBoxNumber: "54229",
+                postalCode: "00200",
                 addressLocality: "Nairobi",
                 addressCountry: "KE",
               },

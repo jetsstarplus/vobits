@@ -22,7 +22,7 @@ const services = [
     n: "02",
     verb: "Implement",
     title: "Microsoft Dynamics 365 Business Central",
-    body: "End‑to‑end ERP implementation, customisation, integration and support. Finance, inventory, procurement and operations — finally in one place, with numbers you can trust.",
+    body: "As a Microsoft partner, we deliver end‑to‑end ERP implementation, customisation, integration and support. Finance, inventory, procurement and operations — finally in one place, with numbers you can trust.",
     tags: ["ERP Implementation", "AL Extensions", "Integrations", "Training & Support"],
     outcome: "One source of truth for the whole business.",
     accent: "#b58cff",
@@ -153,7 +153,7 @@ export default function Services() {
       >
         {/* Intro panel */}
         <div className="mb-6 flex shrink-0 flex-col justify-center lg:motion-safe:mb-0 lg:motion-safe:w-[34vw] lg:max-w-xl">
-          <Chapter n="02" label="What we do" className="mb-8" />
+          <Chapter n="03" label="What we do" className="mb-8" />
           <h2 className="text-[clamp(2.4rem,5.5vw,5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white">
             Three ways
             <br />

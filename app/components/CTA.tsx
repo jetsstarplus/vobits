@@ -25,7 +25,7 @@ export default function CTA() {
       />
 
       <div className="mx-auto flex max-w-7xl flex-col items-center text-center">
-        <Chapter n="05" label="Your next step" className="mb-10" />
+        <Chapter n="06" label="Your next step" className="mb-10" />
         <LineReveal
           className="text-[clamp(3rem,11vw,9.5rem)] font-semibold leading-[0.92] tracking-[-0.05em] text-white"
           lines={[

@@ -51,8 +51,8 @@ export default function Hero() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
           </span>
-          Software · ERP · HR &amp; Payroll
-          <span className="hidden sm:inline">— Nairobi</span>
+          Microsoft Partner
+          <span className="hidden sm:inline">· Software · ERP · HR &amp; Payroll — Nairobi</span>
         </motion.p>
 
         <LineReveal
@@ -77,8 +77,8 @@ export default function Hero() {
         >
           <p className="text-base leading-relaxed text-white/60 sm:text-lg">
             Bespoke applications, Microsoft Dynamics 365 Business Central and
-            managed HR &amp; payroll — engineered in Nairobi for organisations
-            across East Africa.
+            managed HR &amp; payroll for NGOs, professional bodies, government
+            institutions and growing businesses across East Africa.
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <ButtonLink href="/contact">Start a project</ButtonLink>
