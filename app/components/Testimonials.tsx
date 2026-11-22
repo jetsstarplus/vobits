@@ -1,70 +1,96 @@
 import { Reveal } from "./ui/Motion";
 
-const testimonials = [
+type Story = {
+  org: string;
+  person?: string;
+  sector: string;
+  delivered: string[];
+};
+
+const featured: Story = {
+  org: "Engineers Board of Kenya",
+  sector: "Regulator",
+  delivered: ["Licensing & Accreditation Portal", "Finance Portal", "Events Portal"],
+};
+
+const stories: Story[] = [
   {
-    quote:
-      "Vobits delivered our Business Central implementation on time and on budget. Their team understood our processes deeply and the system has transformed how we operate across all our departments.",
-    name: "James Mwangi",
-    title: "CFO, East Africa Manufacturing Co.",
+    org: "Kemsal Limited",
+    person: "QS. Olivia Mwembe, CEO",
+    sector: "Private sector",
+    delivered: ["Electronic Document Management (EDMS)", "ERP"],
   },
   {
-    quote:
-      "Their bespoke application has automated what used to take our team days of manual work. The Vobits team were responsive, thorough, and genuinely invested in our success.",
-    name: "Amina Hassan",
-    title: "Operations Director, Logistics Group East Africa",
+    org: "Thatch Consultants",
+    person: "Eng. Jacton Mwembe, CEO",
+    sector: "Private sector",
+    delivered: ["Internal Payroll", "Finance ERP"],
   },
   {
-    quote:
-      "Outsourcing our payroll and HR to Vobits was the best decision we made this year. Accurate, compliant, and stress-free — exactly what we needed as we scaled.",
-    name: "David Ochieng",
-    title: "Managing Director, Retail Holdings Ltd.",
+    org: "Mosongo & Mosongo Advocates",
+    person: "Adv. Maosa Mosongo, CEO",
+    sector: "Legal",
+    delivered: ["Internal Finance System"],
   },
 ];
 
-function Card({ t, hidden }: { t: (typeof testimonials)[number]; hidden?: boolean }) {
+function Tags({ items }: { items: string[] }) {
   return (
-    <figure
-      aria-hidden={hidden}
-      className="mx-3 flex w-[82vw] shrink-0 flex-col justify-between rounded-3xl border border-line bg-surface p-7 sm:w-105 sm:p-9"
-    >
-      <blockquote className="text-[1.05rem] leading-relaxed text-white/80">
-        <span className="font-serif text-4xl leading-none text-accent">&ldquo;</span>
-        {t.quote}
-      </blockquote>
-      <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-6">
-        <span className="grid h-10 w-10 place-items-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
-          {t.name[0]}
-        </span>
-        <span>
-          <span className="block text-sm font-semibold text-white">{t.name}</span>
-          <span className="block text-xs text-muted">{t.title}</span>
-        </span>
-      </figcaption>
-    </figure>
+    <ul className="flex flex-wrap gap-2">
+      {items.map((d) => (
+        <li key={d} className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs text-accent">
+          {d}
+        </li>
+      ))}
+    </ul>
   );
 }
 
 export default function Testimonials() {
-  // Repeat so the track is always wider than the viewport, then double for a seamless loop
-  const row = [...testimonials, ...testimonials];
-
   return (
-    <section id="testimonials" className="relative pb-28 md:pb-40">
-      <div className="mb-12 px-5 sm:px-8">
-        <Reveal className="mx-auto max-w-7xl">
+    <section id="stories" className="relative px-5 pb-28 sm:px-8 md:pb-40">
+      <div className="mx-auto max-w-7xl">
+        <Reveal className="mb-12">
           <h3 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-            In our partners&apos; words.
+            Success stories, <span className="text-white/40">from regulators to law firms.</span>
           </h3>
         </Reveal>
-      </div>
 
-      <div className="marquee marquee-mask overflow-hidden" style={{ ["--marquee-duration" as string]: "60s" }}>
-        <div className="marquee-track flex w-max">
-          {row.map((t, i) => (
-            <Card key={`a${i}`} t={t} hidden={i >= testimonials.length} />
-          ))}
-          {row.map((t, i) => (
-            <Card key={`b${i}`} t={t} hidden />
+        {/* Featured */}
+        <Reveal>
+          <article className="relative overflow-hidden rounded-3xl border border-line bg-surface p-7 sm:p-10 lg:p-14">
+            <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
+            <div className="relative grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-end">
+              <div>
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted">
+                  Featured · {featured.sector}
+                </p>
+                <h4 className="mt-4 text-[clamp(2rem,4.5vw,3.6rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-white">
+                  {featured.org}
+                </h4>
+                <p className="mt-4 max-w-lg text-[0.95rem] leading-relaxed text-white/55">
+                  Digital services for Kenya&apos;s engineering regulator — from licensing
+                  and accreditation to finance and events, delivered as connected portals.
+                </p>
+              </div>
+              <Tags items={featured.delivered} />
+            </div>
+          </article>
+        </Reveal>
+
+        <div className="mt-6 grid gap-6 md:grid-cols-3">
+          {stories.map((s, i) => (
+            <Reveal key={s.org} delay={i * 0.08} className="h-full">
+              <article className="flex h-full flex-col rounded-3xl border border-line bg-surface p-7 sm:p-9">
+                <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted">{s.sector}</p>
+                <h4 className="mt-4 text-2xl font-semibold tracking-tight text-white">{s.org}</h4>
+                {s.person && <p className="mt-1 text-sm text-white/55">{s.person}</p>}
+                <div className="mt-8 border-t border-line pt-6 md:mt-auto">
+                  <p className="mb-3 text-xs uppercase tracking-[0.18em] text-white/40">Delivered</p>
+                  <Tags items={s.delivered} />
+                </div>
+              </article>
+            </Reveal>
           ))}
         </div>
       </div>
